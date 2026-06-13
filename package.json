@@ -1,0 +1,53 @@
+{
+  "name": "@tychilabs/tyi-mcp",
+  "version": "1.0.0-beta.7",
+  "description": "Agent-native Tychi wallet MCP — onboard, status, chat, reset. Self-custody keys local; brain runs agent logic.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "tyi-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "architecture.png"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "tychi",
+    "tyi",
+    "wallet",
+    "agent",
+    "self-custody",
+    "openclaw",
+    "claude",
+    "ugf",
+    "arbitrum"
+  ],
+  "author": "Tychi Labs <yash@tychilabs.com>",
+  "license": "Apache-2.0",
+  "homepage": "https://tychilabs.com",
+  "publishConfig": {
+    "access": "public",
+    "tag": "beta"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@tychilabs/tyi": "1.0.0-beta.4",
+    "dotenv": "^17.4.2",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.17",
+    "typescript": "^5.7.0"
+  }
+}
