@@ -13,7 +13,7 @@
 
 Agent-native MCP server (stdio) for Cursor and other hosts. Nine tools: routing (`tyi_route`), readiness (`tyi_status`), onboarding, fast wallet lifecycle (`create` / `import` / `switch`), and `tyi_chat` for balances, sends, and policy-gated payments on **Arbitrum One**. Private keys encrypted in `~/.tyi` on the operator machine; **signing never leaves the device**. Hosted Tychi brain parses intent and runs the LLM — configure `TYCHI_BRAIN_URL` (HTTPS recommended; see [SECURITY.md](./SECURITY.md)).
 
-**Agents →** `@tychilabs/tyi-mcp@1.0.0-beta.7` · **Humans →** [`@tychilabs/tyi`](https://www.npmjs.com/package/@tychilabs/tyi)
+**Agents →** `@tychilabs/tyi-mcp@1.0.0-beta.8` · **Humans →** [`@tychilabs/tyi`](https://www.npmjs.com/package/@tychilabs/tyi)
 
 ![Tychi agent wallet architecture](https://unpkg.com/@tychilabs/tyi-mcp@beta/architecture.png)
 
@@ -85,8 +85,8 @@ Import seed or private key → `tyi_import_wallet` only (never via `tyi_chat`).
 Pin the release (do not use floating `@beta` in production):
 
 ```bash
-npx @tychilabs/tyi-mcp@1.0.0-beta.7
-npx @tychilabs/tyi-mcp@1.0.0-beta.7 --tools
+npx @tychilabs/tyi-mcp@1.0.0-beta.8
+npx @tychilabs/tyi-mcp@1.0.0-beta.8 --tools
 ```
 
 ---
@@ -106,7 +106,7 @@ Repo includes [`.mcp.json`](./.mcp.json) (Open Plugins) for Cursor Directory. Se
   "mcpServers": {
     "tychi": {
       "command": "npx",
-      "args": ["@tychilabs/tyi-mcp@1.0.0-beta.7"],
+      "args": ["@tychilabs/tyi-mcp@1.0.0-beta.8"],
       "env": {
         "TYI_PASSWORD": "<from tyi_onboard>",
         "TYCHI_BRAIN_URL": "<https brain URL — required>"
@@ -121,7 +121,7 @@ Beta default if unset in code: `http://hosted_brain.tychilabs.com` — use HTTPS
 OpenClaw:
 
 ```bash
-openclaw mcp set tychi '{"command":"npx","args":["@tychilabs/tyi-mcp@1.0.0-beta.7"],"env":{"TYI_PASSWORD":"<password>","TYCHI_BRAIN_URL":"<https brain URL>"}}'
+openclaw mcp set tychi '{"command":"npx","args":["@tychilabs/tyi-mcp@1.0.0-beta.8"],"env":{"TYI_PASSWORD":"<password>","TYCHI_BRAIN_URL":"<https brain URL>"}}'
 openclaw mcp reload
 ```
 

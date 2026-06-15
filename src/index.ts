@@ -10,15 +10,15 @@ function printHelp(): void {
   process.stdout.write(
     `@tychilabs/tyi-mcp — agent-native Tychi wallet MCP\n\n` +
       `USAGE:\n` +
-      `  npx @tychilabs/tyi-mcp@1.0.0-beta.7           run stdio MCP server\n` +
-      `  npx @tychilabs/tyi-mcp@1.0.0-beta.7 --tools   list tools\n` +
-      `  npx @tychilabs/tyi-mcp@1.0.0-beta.7 --help    this help\n\n` +
+      `  npx @tychilabs/tyi-mcp@1.0.0-beta.8           run stdio MCP server\n` +
+      `  npx @tychilabs/tyi-mcp@1.0.0-beta.8 --tools   list tools\n` +
+      `  npx @tychilabs/tyi-mcp@1.0.0-beta.8 --help    this help\n\n` +
       `AGENT FLOW:\n` +
       `  tyi_status → tyi_onboard_schema → tyi_onboard → tyi_status → tyi_chat\n\n` +
       `MCP HOST CONFIG:\n` +
       `  "tychi": {\n` +
       `    "command": "npx",\n` +
-      `    "args": ["@tychilabs/tyi-mcp@1.0.0-beta.7"],\n` +
+      `    "args": ["@tychilabs/tyi-mcp@1.0.0-beta.8"],\n` +
       `    "env": {\n` +
       `      "TYI_PASSWORD": "<after tyi_onboard>",\n` +
       `      "TYCHI_BRAIN_URL": "<https brain URL — see SECURITY.md>"\n` +

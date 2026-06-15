@@ -1,7 +1,8 @@
 {
   "name": "@tychilabs/tyi-mcp",
-  "version": "1.0.0-beta.7",
-  "description": "Agent-native Tychi wallet MCP — onboard, status, chat, reset. Self-custody keys local; brain runs agent logic. Pin 1.0.0-beta.7.",
+  "version": "1.0.0-beta.8",
+  "mcpName": "io.github.TychiWallet/tyi-mcp",
+  "description": "Agent-native Tychi wallet MCP — onboard, status, chat, reset. Self-custody keys local; brain runs agent logic. Pin 1.0.0-beta.8.",
   "repository": {
     "type": "git",
     "url": "https://github.com/TychiWallet/tyi-mcp"
@@ -18,7 +19,8 @@
     "SECURITY.md",
     "architecture.png",
     ".mcp.json",
-    ".plugin/plugin.json"
+    ".plugin/plugin.json",
+    "server.json"
   ],
   "engines": {
     "node": ">=18"

@@ -32,7 +32,7 @@ Never pass wallet secrets through `tyi_chat`.
 
 ## Supply chain
 
-- Install pinned release: `@tychilabs/tyi-mcp@1.0.0-beta.7` (avoid floating `@beta` in production).
+- Install pinned release: `@tychilabs/tyi-mcp@1.0.0-beta.8` (avoid floating `@beta` in production).
 - Runtime: `@tychilabs/tyi@1.0.0-beta.4` (Apache-2.0, [TychiWallet/tyi-mcp](https://github.com/TychiWallet/tyi-mcp)).
 - Verify checksum on npm before deploy in high-assurance environments.
 

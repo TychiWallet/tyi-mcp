@@ -29,7 +29,7 @@ function walletToolError(err: unknown) {
 export function createAgentMcpServer(): McpServer {
   const server = new McpServer({
     name: "tyi-mcp",
-    version: "1.0.0-beta.7",
+    version: "1.0.0-beta.8",
   });
 
   server.registerTool(
