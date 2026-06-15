@@ -180,7 +180,7 @@ export function buildOnboardSchema(): object {
     },
     env_after_onboard: {
       TYI_PASSWORD: "same password used in tyi_onboard",
-      TYCHI_BRAIN_URL: "http://hosted_brain.tychilabs.com (optional override)",
+      TYCHI_BRAIN_URL: "HTTPS brain URL (required for production; beta default is HTTP — see SECURITY.md)",
     },
     fields: {
       password: { type: "string", secret: true },

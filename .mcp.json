@@ -2,10 +2,10 @@
   "mcpServers": {
     "tychi": {
       "command": "npx",
-      "args": ["-y", "@tychilabs/tyi-mcp@beta"],
+      "args": ["@tychilabs/tyi-mcp@1.0.0-beta.7"],
       "env": {
         "TYI_PASSWORD": "${TYI_PASSWORD}",
-        "TYCHI_BRAIN_URL": "http://hosted_brain.tychilabs.com"
+        "TYCHI_BRAIN_URL": "${TYCHI_BRAIN_URL}"
       }
     }
   }

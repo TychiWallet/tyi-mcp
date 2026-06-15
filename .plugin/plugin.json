@@ -1,0 +1,15 @@
+{
+  "name": "tychi-mcp",
+  "version": "1.0.0-beta.7",
+  "description": "Agent-native self-custody wallet MCP: onboard, status, multi-wallet, Arbitrum balances/sends, policy-gated payments via tyi_chat. Private keys encrypted in ~/.tyi on the operator machine; transaction signing is local-only. Hosted Tychi brain parses intent and runs LLM — set TYCHI_BRAIN_URL (HTTPS recommended). Nine stdio tools including tyi_route, tyi_onboard, tyi_import_wallet. Pin @tychilabs/tyi-mcp@1.0.0-beta.7. Apache-2.0. See SECURITY.md.",
+  "author": {
+    "name": "Tychi Labs",
+    "email": "yash@tychilabs.com",
+    "url": "https://tychilabs.com"
+  },
+  "homepage": "https://tychilabs.com",
+  "repository": "https://github.com/TychiWallet/tyi-mcp",
+  "license": "Apache-2.0",
+  "keywords": ["mcp", "wallet", "agent", "arbitrum", "self-custody", "tychi"],
+  "logo": "architecture.png"
+}

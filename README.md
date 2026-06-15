@@ -11,9 +11,9 @@
 
 **Give your AI agent a wallet — onboard, hold funds, send, and pay under policy.**
 
-Agent-native MCP server for stdio hosts. Fast direct tools for wallet setup and ops; `tyi_chat` for balance, sends, and policy-gated payments. Keys encrypted in `~/.tyi` on the operator's machine. Hosted brain parses intent and routes LLM — signing never leaves the device.
+Agent-native MCP server (stdio) for Cursor and other hosts. Nine tools: routing (`tyi_route`), readiness (`tyi_status`), onboarding, fast wallet lifecycle (`create` / `import` / `switch`), and `tyi_chat` for balances, sends, and policy-gated payments on **Arbitrum One**. Private keys encrypted in `~/.tyi` on the operator machine; **signing never leaves the device**. Hosted Tychi brain parses intent and runs the LLM — configure `TYCHI_BRAIN_URL` (HTTPS recommended; see [SECURITY.md](./SECURITY.md)).
 
-**Agents →** `@tychilabs/tyi-mcp` · **Humans →** [`@tychilabs/tyi`](https://www.npmjs.com/package/@tychilabs/tyi)
+**Agents →** `@tychilabs/tyi-mcp@1.0.0-beta.7` · **Humans →** [`@tychilabs/tyi`](https://www.npmjs.com/package/@tychilabs/tyi)
 
 ![Tychi agent wallet architecture](https://unpkg.com/@tychilabs/tyi-mcp@beta/architecture.png)
 
@@ -82,36 +82,46 @@ Import seed or private key → `tyi_import_wallet` only (never via `tyi_chat`).
 
 ## Install
 
+Pin the release (do not use floating `@beta` in production):
+
 ```bash
-npx -y @tychilabs/tyi-mcp@beta
-npx @tychilabs/tyi-mcp@beta --tools
+npx @tychilabs/tyi-mcp@1.0.0-beta.7
+npx @tychilabs/tyi-mcp@1.0.0-beta.7 --tools
 ```
+
+---
+
+## Security
+
+See **[SECURITY.md](./SECURITY.md)** — trust model, brain transport (HTTP beta endpoint), sensitive tools, supply-chain pinning. No install scripts.
 
 ---
 
 ## MCP host config
 
-Repo includes [`.mcp.json`](./.mcp.json) (Open Plugins) for Cursor Directory one-click install. Set `TYI_PASSWORD` in your shell or host env before use.
+Repo includes [`.mcp.json`](./.mcp.json) (Open Plugins) for Cursor Directory. Set **`TYI_PASSWORD`** and **`TYCHI_BRAIN_URL`** in host env (HTTPS brain recommended).
 
 ```json
 {
   "mcpServers": {
     "tychi": {
       "command": "npx",
-      "args": ["-y", "@tychilabs/tyi-mcp@beta"],
+      "args": ["@tychilabs/tyi-mcp@1.0.0-beta.7"],
       "env": {
         "TYI_PASSWORD": "<from tyi_onboard>",
-        "TYCHI_BRAIN_URL": "http://hosted_brain.tychilabs.com"
+        "TYCHI_BRAIN_URL": "<https brain URL — required>"
       }
     }
   }
 }
 ```
 
+Beta default if unset in code: `http://hosted_brain.tychilabs.com` — use HTTPS self-host or trusted network only.
+
 OpenClaw:
 
 ```bash
-openclaw mcp set tychi '{"command":"npx","args":["-y","@tychilabs/tyi-mcp@beta"],"env":{"TYI_PASSWORD":"<password>","TYCHI_BRAIN_URL":"http://hosted_brain.tychilabs.com"}}'
+openclaw mcp set tychi '{"command":"npx","args":["@tychilabs/tyi-mcp@1.0.0-beta.7"],"env":{"TYI_PASSWORD":"<password>","TYCHI_BRAIN_URL":"<https brain URL>"}}'
 openclaw mcp reload
 ```
 
@@ -155,7 +165,7 @@ Prefer MCP `env` for `TYI_PASSWORD` over chat after onboard.
 | `TYI_PASSWORD env required` | Set env after onboard; reload host |
 | `no_llm_key` / missing `llm_key` | `tyi_onboard` llm_only |
 | `partial install` | `tyi_reset` then fresh onboard |
-| `fetch failed` on brain | Use `http://` not `https://` for hosted brain |
+| `fetch failed` on brain | Set `TYCHI_BRAIN_URL` explicitly; use HTTPS self-host or beta `http://hosted_brain.tychilabs.com` |
 
 ---
 
@@ -164,7 +174,7 @@ Prefer MCP `env` for `TYI_PASSWORD` over chat after onboard.
 | Variable | Required | Default |
 |----------|----------|---------|
 | `TYI_PASSWORD` | After onboard | — |
-| `TYCHI_BRAIN_URL` | No | `http://hosted_brain.tychilabs.com` |
+| `TYCHI_BRAIN_URL` | Recommended | `http://hosted_brain.tychilabs.com` (beta; prefer HTTPS override) |
 | `TYI_DATA_DIR` | No | `~/.tyi` |
 | `KEYSTORE_PASSWORD` | Alias | same as `TYI_PASSWORD` |
 
