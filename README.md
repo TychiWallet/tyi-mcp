@@ -9,67 +9,125 @@
 [![website](https://img.shields.io/badge/website-tychilabs.com-blue)](https://tychilabs.com)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue)](https://opensource.org/licenses/Apache-2.0)
 
-**Audience:** MCP host agents (OpenClaw, Claude Desktop, Cursor, Codex).  
-**Not for humans.** Human CLI: [`@tychilabs/tyi`](https://www.npmjs.com/package/@tychilabs/tyi).
+**Give your AI agent a wallet — onboard, hold funds, send, and pay under policy.**
 
-Self-custody wallet MCP. Keys in `~/.tyi`. Brain at `http://hosted_brain.tychilabs.com`. Signing local only.
+Agent-native MCP server for stdio hosts. Fast direct tools for wallet setup and ops; `tyi_chat` for balance, sends, and policy-gated payments. Keys encrypted in `~/.tyi` on the operator's machine. Hosted brain parses intent and routes LLM — signing never leaves the device.
+
+**Agents →** `@tychilabs/tyi-mcp` · **Humans →** [`@tychilabs/tyi`](https://www.npmjs.com/package/@tychilabs/tyi)
 
 ![Tychi agent wallet architecture](https://unpkg.com/@tychilabs/tyi-mcp@beta/architecture.png)
 
 ---
 
-## Mandatory flow
+## What it does
+
+- **Agent routing** — `tyi_route` maps intent → correct tool (avoids slow misuse of `tyi_chat`)
+- **Readiness gate** — `tyi_status` checks mode before any wallet action
+- **Onboarding** — `tyi_onboard` + `tyi_onboard_schema` for first-time setup (password, LLM provider, API key)
+- **Wallet lifecycle** — `tyi_create_wallet`, `tyi_import_wallet`, `tyi_switch_wallet` (fast, no brain loop)
+- **Agent chat** — `tyi_chat` for balances, sends, transfers, payments, policy, limits, history
+- **Multi-wallet** — create, import, switch active wallet from one keystore
+- **Policy caps** — spend limits enforced before signing
+- **Local signing** — private keys in memory on operator machine only
+- **Gasless routing** — UGF payment rails for cross-chain gas settlement
+- **Audit log** — local activity trail in `~/.tyi`
+- **Reset** — `tyi_reset` wipes local data when operator confirms
+
+**Beta ships on Arbitrum One** (chain id `42161`) — EVM balances, sends, and UGF gasless payments. More chains in registry; Solana/Sui import supported.
+
+---
+
+## Arbitrum One
+
+Onchain agent wallet on **Arbitrum One** — self-custody, local signing, UGF gas routing today:
+
+| Roadmap | What it unlocks |
+|---------|-----------------|
+| **Automation** | Policy-gated agents — recurring sends, triggers, scheduled flows |
+| **Trading** | Spot swaps across Arbitrum liquidity — agent quotes, operator confirms |
+| **Lending** | Supply on Arbitrum money markets — yield without leaving keystore |
+| **Borrowing** | Collateralized borrow — cap-enforced, fully self-custodial |
+
+---
+
+## Agent flow (mandatory)
 
 ```
 tyi_route → tyi_status
-  → direct tool (create/import/switch/onboard/reset)   ← FAST, no brain
-  → tyi_chat only for balance/send/policy              ← SLOW
+  → direct tool (onboard / create / import / switch / reset)   ← FAST
+  → tyi_chat (balance / send / pay / policy only)              ← SLOW
 ```
 
 Never call `tyi_chat` when `tyi_status.ready` is false.
 
-**Import additional wallet:** collect seed/privkey from operator → `tyi_import_wallet` — never via `tyi_chat`.
-
----
-
-## Upcoming on Arbitrum One
-
-Onchain DeFi for your agent wallet — same self-custody, same local signing, built for **Arbitrum One**:
-
-| Coming | What it unlocks |
-|--------|-----------------|
-| **Automation** | Policy-gated agents that act onchain 24/7 — recurring sends, triggers, scheduled flows |
-| **Trading** | Spot swaps and routing across Arbitrum liquidity — agent quotes, you confirm, sign locally |
-| **Lending** | Supply assets on Arbitrum money markets — earn yield without leaving your keystore |
-| **Borrowing** | Collateralized borrow onchain — agent-assisted, cap-enforced, fully self-custodial |
-
-Native Arbitrum execution. UGF gas routing today. Full DeFi stack next.
-
----
-
-| Brain action | MCP tool | Status |
-|--------------|----------|--------|
-| `import_wallet` | `tyi_import_wallet` | done |
-| `create_wallet` | `tyi_create_wallet` | done |
-| `switch_wallet` | `tyi_switch_wallet` | done |
-| `reveal_wallet` | `tyi_reveal_wallet` | missing |
+Import seed or private key → `tyi_import_wallet` only (never via `tyi_chat`).
 
 ---
 
 ## Tools
 
-| Tool | When |
-|------|------|
+| Tool | Use when |
+|------|----------|
 | `tyi_route` | **First** — intent → tool map |
-| `tyi_create_wallet` | User wants new wallet → **not** `tyi_chat` |
-| `tyi_import_wallet` | User wants import → **not** `tyi_chat` |
-| `tyi_switch_wallet` | Change active wallet → **not** `tyi_chat` |
-| `tyi_onboard` | First setup |
-| `tyi_chat` | Balance, send, pay, policy only |
+| `tyi_status` | Session start — ready? what's missing? |
+| `tyi_onboard_schema` | Field schema before onboard |
+| `tyi_onboard` | First setup or LLM-only setup |
+| `tyi_create_wallet` | New wallet by name |
+| `tyi_import_wallet` | Import mnemonic or privkey (EVM / Solana / Sui) |
+| `tyi_switch_wallet` | Change active wallet |
+| `tyi_reset` | Wipe `~/.tyi` (`confirm: true`) |
+| `tyi_chat` | Balance, send, pay, transfer, policy, limits |
 
 ---
 
-## Operator prompts (you ask human; never invent secrets)
+## Install
+
+```bash
+npx -y @tychilabs/tyi-mcp@beta
+npx @tychilabs/tyi-mcp@beta --tools
+```
+
+---
+
+## MCP host config
+
+Repo includes [`.mcp.json`](./.mcp.json) (Open Plugins) for Cursor Directory one-click install. Set `TYI_PASSWORD` in your shell or host env before use.
+
+```json
+{
+  "mcpServers": {
+    "tychi": {
+      "command": "npx",
+      "args": ["-y", "@tychilabs/tyi-mcp@beta"],
+      "env": {
+        "TYI_PASSWORD": "<from tyi_onboard>",
+        "TYCHI_BRAIN_URL": "http://hosted_brain.tychilabs.com"
+      }
+    }
+  }
+}
+```
+
+OpenClaw:
+
+```bash
+openclaw mcp set tychi '{"command":"npx","args":["-y","@tychilabs/tyi-mcp@beta"],"env":{"TYI_PASSWORD":"<password>","TYCHI_BRAIN_URL":"http://hosted_brain.tychilabs.com"}}'
+openclaw mcp reload
+```
+
+---
+
+## Onboarding modes
+
+| Mode | Meaning |
+|------|---------|
+| `fresh` | No wallet — run `tyi_onboard` |
+| `llm_only` | Wallet exists, no LLM key — onboard LLM fields only |
+| `ready` | OK for `tyi_chat` |
+
+**Operator provides (never invent):** keystore password, LLM provider + API key, optional mnemonic for import.
+
+Prefer MCP `env` for `TYI_PASSWORD` over chat after onboard.
 
 | Field | Prompt |
 |-------|--------|
@@ -78,42 +136,6 @@ Native Arbitrum execution. UGF gas routing today. Full DeFi stack next.
 | `llm_provider` | `anthropic` \| `gemini` \| `openai` \| `groq` |
 | `llm_api_key` | Provider API key (validated, stored encrypted on brain) |
 | `mnemonic` | Optional import (fresh only) |
-
-Prefer MCP `env` for `TYI_PASSWORD` over chat after onboard.
-
----
-
-## Modes (`tyi_status.mode`)
-
-| Mode | Meaning | `tyi_onboard` needs |
-|------|---------|---------------------|
-| `fresh` | No wallet / incomplete | `password`, `llm_provider`, `llm_api_key`; optional `agent_name`, `mnemonic` |
-| `llm_only` | Wallet exists, no LLM vault | Same LLM fields + `password` |
-| `ready` | OK for chat | Do not onboard; use `tyi_chat` |
-
----
-
-## MCP host config
-
-```json
-{
-  "tychi": {
-    "command": "npx",
-    "args": ["-y", "@tychilabs/tyi-mcp@beta"],
-    "env": {
-      "TYI_PASSWORD": "<from tyi_onboard>",
-      "TYCHI_BRAIN_URL": "http://hosted_brain.tychilabs.com"
-    }
-  }
-}
-```
-
-OpenClaw set:
-
-```bash
-openclaw mcp set tychi '{"command":"npx","args":["-y","@tychilabs/tyi-mcp@beta"],"env":{"TYI_PASSWORD":"<password>","TYCHI_BRAIN_URL":"http://hosted_brain.tychilabs.com"}}'
-openclaw mcp reload
-```
 
 ---
 
@@ -137,23 +159,25 @@ openclaw mcp reload
 
 ---
 
-## Env
+## Environment
 
-| Var | Required | Default |
-|-----|----------|---------|
-| `TYI_PASSWORD` | After onboard, for chat | — |
+| Variable | Required | Default |
+|----------|----------|---------|
+| `TYI_PASSWORD` | After onboard | — |
 | `TYCHI_BRAIN_URL` | No | `http://hosted_brain.tychilabs.com` |
 | `TYI_DATA_DIR` | No | `~/.tyi` |
-| `KEYSTORE_PASSWORD` | Alias for `TYI_PASSWORD` | — |
+| `KEYSTORE_PASSWORD` | Alias | same as `TYI_PASSWORD` |
 
 ---
 
-## Install
+## Links
 
-```bash
-npx -y @tychilabs/tyi-mcp@beta
-npx @tychilabs/tyi-mcp@beta --tools
-```
+- Website: https://tychilabs.com
+- npm: https://www.npmjs.com/package/@tychilabs/tyi-mcp
+- GitHub: https://github.com/TychiWallet/tyi-mcp
+- Human CLI: https://www.npmjs.com/package/@tychilabs/tyi
+
+---
 
 ## License
 
